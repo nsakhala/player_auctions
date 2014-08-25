@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+{% load static %}
+{% load staticfiles %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="screen, projection"/>
+            
+    <title>Welcome {{request.user}}</title>
+    <link href="{% static 'css/demo.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/jqbar.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/bootstrap-responsive.css' %}" rel="stylesheet" type="text/css" >
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600' rel='stylesheet' type='text/css'>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel='stylesheet'>
+    <link href="{% static 'css/simpletextrotator.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script src="{% static 'js/validate.js' %}"></script>
+    <script src="http://localhost:8002/socket.io/socket.io.js"></script>
+
+
+
+
+
+    <script>
+    var local_bid=0;
+    var purse={{money}};
+    
+    var post_success=0;
+    var pid=parseInt({{player.id}});
+    pid+=1;
+
+    var pBid=parseInt({{player.pBaseprice}});
+    var notif_time;
+    var hr,mi,se;
+    {% for notification in notifications|slice:":1" %}
+    notif_time="{{ notification.timestamp|date:"c" }}";
+    
+    {%endfor%}
+
+    var notif_time=notif_time.substring(11,19);
+    var notif_hr=parseInt(notif_time.substring(0,2));
+    var notif_min=parseInt(notif_time.substring(3,5));
+    var notif_sec=parseInt(notif_time.substring(6,8));
+
+
+
+    if(notif_min>30)
+    {
+        notif_min=notif_min-30;
+        notif_hr+=6;
+    }
+
+    else{
+        notif_min+=30;
+        notif_hr+=5;
+    }
+
+
+
+    se=notif_sec;
+
+
+
+    function startTime() {
+
+        $("#quitButton").click(function() {
+            $.ajax({
+                    url: "{% url 'bidder_quit' %}",
+                    type: "POST",
+                    data:{},
+                    success: function(data) {
+                        window.location.href="/bidder_quit/";
+                    },
+                    beforeSend: function(xhr){
+                        var csrftoken = getCookie("csrftoken");
+                        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                    }
+                });
+            });
+
+        var stats = "{{player.pStatus}}";
+        if(stats=="Sold"){
+            var rid = parseInt({{player.id}}+1);
+            window.location.href="/detail/"+rid;
+        }
+        var playernum={{ob.playersBought}};
+        var purseValue = parseInt({{ob.money}});
+        if(playernum>=16 || purseValue<=2000000){
+            $("#quitButton").prop("disabled",false);
+        }
+        var numforeign = parseInt({{ob.playersForeign}});
+        var country = "{{player.pCountry}}";
+        if(numforeign>=8 && country!="India"){
+            $("#raiseButton").prop("disabled",true);
+        }
+        var minRequired = parseInt({{player.pBaseprice}})+1000000
+        if(purseValue<minRequired){
+            $("#raiseButton").prop("disabled",true);
+        }
+    var ps;
+    var today=new Date();
+    var h=parseInt(today.getHours());
+    var m=parseInt(today.getMinutes());
+    var s=parseInt(today.getSeconds());
+    if(s<se)
+        {s+=60;
+        ps=s-se;}
+    else{
+        ps=s-se;
+    }
+    document.getElementById('txt').innerHTML ="Time left:"+(30-ps)+" seconds";
+    if(ps>=30)
+    {
+        
+    var pid_send=parseInt({{player.id}});
+
+    if(pid<=518)
+    {
+    $.ajax({
+                    url: "{% url 'update_player' %}",
+                    type: "POST",
+                    data:{'pId':pid_send,'pBid':pBid},
+                    success: function(data) {
+                        post_success=1;
+                        if(pid<518){
+                        window.location.href="/detail/"+pid;
+                        }
+                        else{
+                            var lid = 1;
+                            window.location.href="/detail/"+lid;
+                        }
+                    },
+                    
+                    beforeSend: function(xhr){
+                        var csrftoken = getCookie("csrftoken");
+                        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                    }
+                });
+}
+
+    
+    
+    }
+
+                
+        
+        
+    
+    
+    else
+    {setTimeout("startTime()",500);
+
+    }
+    
+}
+
+function checkTime(i) {
+    if (i<10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+        function getCookie(name) {
+            var cookieValue = null;
+
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+
+            return cookieValue;
+        }
+
+        $(document).ready(function() {
+            $("#mark-as-read-button").on("click", function(event) {
+                event.preventDefault();
+
+                $.ajax({
+                    url: "{% url 'ajax_mark_as_read' %}",
+                    type: "POST",
+                    success: function(data) {
+                    },
+                    beforeSend: function(xhr){
+                        var csrftoken = getCookie("csrftoken");
+                        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                    }
+                });
+            });
+
+            
+
+            $("body").on("click", "button.send-notification-form-submit", function(event) {
+                event.preventDefault();
+
+
+                var $send_notification_form = $(event.target).parent();
+
+                $.ajax({
+                    url: "{% url 'ajax_send_notification' %}",
+                    type: "POST",
+                    data: {'pId':{{player.id}}},
+                    success: function(data) {
+                       
+                    },
+                    beforeSend: function(xhr){
+                        var csrftoken = getCookie("csrftoken");
+                        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                    }
+                
+                });
+            });
+
+            var socket = io.connect("localhost", {port: 8002});
+
+            socket.on('message', function(message) {
+                var message_json = jQuery.parseJSON(message);
+
+                $("#unread_count").text(message_json.unread_count);
+
+                if ("mark_as_read" in message_json) {
+                    $("#notifications-table tbody").empty();
+                } else {
+                    var $tr = $("<tr>");
+                    $tr.append($("<td>").text(message_json.timestamp));
+                    $tr.append($("<td>").text(message_json.recipient));
+                    $tr.append($("<td>").text(message_json.actor));
+                    $tr.append($("<td>").text(message_json.verb));
+                    
+                    
+
+                    $("#notifications-table tbody").prepend($tr);
+                    var ts=message_json.timestamp;
+                    var t=ts.substring(11,19);
+                    hr=parseInt(t.substring(0,2));
+                    mi=parseInt(t.substring(3,5));
+                    se=parseInt(t.substring(6,8));
+                    if(mi+30>60)
+                        {hr+=6;
+                            mi=mi-30;} 
+                    else{
+                        mi=mi+30;
+                        hr=hr+5;
+                    }
+                    if(message_json.verb=="Player Sold." && message_json.actor!="{{request.user}}")
+                    {window.location.href="/detail/"+pid;
+                    }
+                    document.getElementById("timer").innerHTML="Last Bid at: "+hr%24+":"+mi+":"+se+" by "+message_json.actor;
+                    
+
+                    if(message_json.verb%1===0)
+                    {pBid=parseInt(message_json.verb);
+                        if(message_json.actor=="{{request.user}}")
+                        {
+                            if(local_bid==0)
+                            {
+                                purse=purse-pBid;
+                                local_bid=1;
+                            }
+                            else
+                            {
+                                purse={{money}}-pBid;
+                            }
+                        }
+                    document.getElementById("purse").innerHTML="Your purse:"+purse;}
+                    document.getElementById("current_bid").innerHTML="Current Bid:"+pBid;
+                    
+                    }
+
+            });
+        });
+    </script>
+</head>
+<body onload="startTime()">
+{% csrf_token %}
+    <div class="container topbottom">
+        <div class="row-fluid">
+
+            <div class="span5">
+                <img src="{% static 'img/avatar.jpg' %}" alt="Profile Avatar" class="avatar">
+                <div class="navigation">
+                </div>          
+            </div>
+
+            <div class="span7 homeabout">
+                <div class="person">
+                    <span class="name">{{player.pName}}</span>
+                    <div id="current_bid">No bid yet.</div>
+                    <div id="timer"></div>
+                    <div id="txt"></div>
+                    <div id="purse">Your purse:{{money}}</div>
+                    <!-- <div id="bot"></div> -->
+                    <div class="font16">
+                        {{player.pCountry}} 
+                        <!-- <span class="greentext"><a href="#">EGrappler.com</a></span> -->
+                    </div>
+                </div>
+                <div class="desciption home">
+                    <span class="summary">Career Summary</span>
+                </div>
+                <div class="careerTable" >
+                        <table >
+                            <tr>
+                                <td>
+                                    Age
+                                </td>
+                                <td >
+                                    Matches
+                                </td>
+                                <td>
+                                    Expertise
+                                </td>
+                                <td>
+                                    Base Price
+                                </td>
+                                <td>
+                                    Status
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {{player.pAge}}
+                                </td>
+                                <td >
+                                    {{player.pMatches}}
+                                </td>
+                                <td>
+                                    {{player.pExpertise}}
+                                </td>
+                                <td>
+                                    {{player.pBaseprice}}
+                                </td>
+                                <td>
+                                    {{player.pStatus}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>  
+                <div class="row">
+                    <div class="span6">
+                         <div class="bars">
+                            <div id="bar-1">
+                            </div>
+                            <div id="bar-2">
+                            </div>
+                            <div id="bar-3">
+                            </div>
+                            <div id="bar-4">
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <div class="span6">
+                        <button id="quitButton" class="btn btn-default btn-success btn-lg btn-block" disabled><strong> Quit Auction </strong></a>
+                        <button id="raiseButton" class="btn btn-default btn-success btn-lg btn-block send-notification-form-submit"><span class="icon-white icon-arrow-up"></span><strong> Raise by 10L </strong></a>
+                    </div>
+                </div>          
+                
+            </div>
+        </div>
+        <div id="page-wrap">
+            <span class="my-team">My Team: <br/>{{ob.playersList}}</span>
+        <!-- <ul class="dropdown">
+            <li><a href="#">Unsold</a>
+                <ul class="sub_menu">
+                     {% for player in player_list %}
+                        {% if player.pAuctioned == 1 %}
+                            {% if player.pStatus == "Unsold" %}
+                                <li><a href="#">{{player.pName}}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </li>
+            <li><a href="#">Upcoming</a>
+                <ul class="sub_menu">
+                    {% for player in player_list %}
+                        {% if player.pAuctioned == 0 %}
+                            {% if player.pStatus == "Unsold" %}
+                                <li><a href="#">{{player.pName}}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </li>
+            <li><a href="#">My Team</a>
+                <ul class="sub_menu">
+                    {% if player.pAuctioned == 1 %}
+                        {% if player.pTeam == "KKR" %}
+                            <li><a href="#">{{player.pName}}</a></li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </li>
+        </ul> -->
+        
+    </div>
+
+    </div>
+    
+    <script src="{% static 'js/jquery-1.7.1.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/jqbar.js' %}" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+    $('#soldButton').on('click', function(e){
+        alert('{{player.pName}}');
+    });
+     $(document).ready(function () {            
+        
+            $('#bar-1').jqbar({ label: 'Batting', value: 99, barColor: '#47a447' });
+
+            $('#bar-2').jqbar({ label: 'Bowling', value: 36, barColor: '#47a447' });
+
+            $('#bar-3').jqbar({ label: 'Fielding', value: 85, barColor: '#47a447' });
+
+            $('#bar-4').jqbar({ label: 'Experience', value: 66, barColor: '#47a447' }); 
+                    
+            
+        });
+        
+    </script>
+    <script type="text/javascript" src="{% static 'js/jquery.simple-text-rotator.min.js' %}"></script>
+    <script type="text/javascript" language="javascript" src="{% static 'js/jquery.dropdown.js' %}"></script>
+
+                
+</body>
+<script>
+//     var base=parseInt({{player.pBaseprice}});
+//     var matches=parseInt({{player.pMatches}});
+//     if(matches==0)
+//     {
+//         matches=1;
+//     }
+//     var batAvg=parseInt({{player.pBatAvg}});
+//     var ballAvg=parseInt({{player.pBallAvg}});
+
+//     var w1=1-(matches/base);
+//     var w2=Math.floor(batAvg+(50-ballAvg));
+
+//     document.getElementById("bot").innerHTML=w1+w2;
+
+</script>
+
+
+</html> 

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% load static %}
+{% load staticfiles %}
+<html>
+<title>Welcome {{request.user}}</title>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{%static 'css/main.css'%}" type="text/css" />
+</head>
+
+<body>
+	<div id="navigation">
+		<img src="{%static 'images/ipl_logo.png'%}" alt="IPL logo">
+		
+		<div id="auctions">
+			<h2><span>AUCTIONS</span></h2>
+		</div>
+	</div>
+	<div id="gameover">
+		Thanks for participating<br/>
+		The Auction Process is over.<br/>
+		Here is the Team you Bought:<br/>
+		{{ob.playersList}}
+	</div>
+</body>
+</html>

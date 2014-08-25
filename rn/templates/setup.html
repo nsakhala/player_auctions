@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% load static %}
+{% load staticfiles %}
+<html>
+<title>{{request.session.user_name}}+{{request.session.session_name}}</title>
+
+
+<head>
+
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="stylesheet" href="{%static 'css/main.css'%}" type="text/css" />
+</head>
+
+<body>
+	<div id="navigation">
+		<img src="{%static 'images/ipl_logo.png'%}" alt="IPL logo">
+		
+		<div id="auctions">
+			<h2><span>AUCTIONS</span></h2>
+		</div>
+
+		
+	</div>
+   <form name="input" method="POST">
+       <br>
+       <br>
+       <br>
+       <br>
+       <br>
+       <br>
+       <br>
+        {% csrf_token %}
+        {% for i in x %}
+            
+            <li>{{ item }}</li>
+        {% endfor %}
+        EmailId_1: <input type="text" name="id1"><br>
+        EmailId_2: <input type="text" name="id2"><br>
+        EmailId_3: <input type="text" name="id3"><br>
+        EmailId_4: <input type="text" name="id4"><br>
+        EmailId_5: <input type="text" name="id5"><br>
+        EmailId_6: <input type="text" name="id6"><br>
+        EmailId_7: <input type="text" name="id7"><br>
+        EmailId_8: <input type="text" name="id8"><br>
+        Submit   : <input type="submit" name="Submit" value="Submit">
+        
+   </form>  	
+	
+	
+
+</body>
+</html>

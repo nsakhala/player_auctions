@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<title>{{request.session.user_name}}+{{request.session.session_name}}</title>
+
+
+<head>
+
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="stylesheet" href="{{MEDIA_URL}}css/main.css" type="text/css" />
+</head>
+
+<body>
+	<div id="navigation">
+		<img src="{{MEDIA_URL}}images/ipl_logo.png" alt="IPL logo">
+		
+		<div id="auctions">
+			<h2><span>AUCTIONS</span></h2>
+		</div>
+
+		
+	</div>
+   <br>
+   <br>
+   <br>
+   <br>
+   <br>
+   <br>
+   <br>
+   <form name="input" method="POST" action="select_teams">
+        {% csrf_token %}
+        <input type="radio" name="team" value="A">Team A<br>
+        <input type="radio" name="team" value="B">Team B<br>
+        <input type="radio" name="team" value="C">Team C<br>
+        <input type="radio" name="team" value="D">Team D<br>
+        <input type="radio" name="team" value="E">Team E<br>
+        <input type="radio" name="team" value="F">Team F<br>
+        <input type="radio" name="team" value="G">Team G<br>
+        <input type="radio" name="team" value="H">Team H<br>
+        Submit   : <input type="submit" name="Submit" value="Submit">
+    </form>
+ </body>
+ </html>

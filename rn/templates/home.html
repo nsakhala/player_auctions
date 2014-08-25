@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+{% load static %}
+{% load staticfiles %}
+<html>
+<head>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+
+<style>
+.blockbg {
+
+      background-color: black;
+    width: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      float: absolute;
+      position: fixed;
+      top: 0;
+      left: 0;
+      color: white;
+    }
+    
+
+.con {
+      background-color: white;
+      color: black;
+      font-size: 16px;
+      border: 1px solid gray;
+      padding: 20px;
+      display:block;
+      position: absolute;
+      top: 20%;
+      left: 25%;
+      width: 50%;
+      height: 60%;
+      overflow-y: scroll;
+overflow-x:scroll;
+
+    }
+    
+    
+    
+.closebn {
+      width: 20px;
+      height: 20px;
+      padding: 5px;
+      margin: 2px;
+      float: right;
+      top: 0;
+      background-image: url('//mantriji.in/img/x.png');
+      background-repeat: no-repeat;
+      background-position:center;
+      background-color: lightgray;
+      display: block;
+    }
+    
+    
+.closebn:hover {
+      cursor: pointer;
+    }
+    
+    .blockbkg {
+
+      background-color: black;
+    width: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      float: absolute;
+      position: fixed;
+      top: 0;
+      left: 0;
+      color: white;
+    }
+    
+
+.cont {
+      background-color: white;
+      color: black;
+      font-size: 16px;
+      border: 1px solid gray;
+      padding: 20px;
+      display:block;
+      position: absolute;
+      top: 20%;
+      left: 25%;
+      width: 50%;
+      height: 60%;
+      overflow-y: scroll;
+overflow-x:scroll;
+
+    }
+    
+    
+    
+.closebtn {
+      width: 20px;
+      height: 20px;
+      padding: 5px;
+      margin: 2px;
+      float: right;
+      top: 0;
+      background-image: url('//mantriji.in/img/x.png');
+      background-repeat: no-repeat;
+      background-position:center;
+      background-color: lightgray;
+      display: block;
+    }
+    
+    
+.closebtn:hover {
+      cursor: pointer;
+    }
+</style>
+
+
+
+
+    <script>
+    $(document).ready(function () {
+      $("#closebn").click(function () {
+        $("#dg").hide('800', "swing", function () { $("#bg").fadeOut("500"); });
+      });
+      $("#signup").click(function () {
+        if (document.getElementById('bg').style.visibility == 'hidden') {
+          document.getElementById('bg').style.visibility = '';
+          $("#bg").hide();
+        }
+        if (document.getElementById('dg').style.visibility == 'hidden') {
+          document.getElementById('dg').style.visibility = '';
+          $("#dg").hide();
+        }
+        $("#bg").fadeIn(500, "linear", function () { $("#dg").show(800, "swing"); });
+      });    
+
+    });
+  </script>
+  
+  <script>
+    $(document).ready(function () {
+      $("#closebtn").click(function () {
+        $("#dkg").hide('800', "swing", function () { $("#bkg").fadeOut("500"); });
+      });
+      $("#login").click(function () {
+        if (document.getElementById('bkg').style.visibility == 'hidden') {
+          document.getElementById('bkg').style.visibility = '';
+          $("#bkg").hide();
+        }
+        if (document.getElementById('dkg').style.visibility == 'hidden') {
+          document.getElementById('dkg').style.visibility = '';
+          $("#dkg").hide();
+        }
+        $("#bkg").fadeIn(500, "linear", function () { $("#dkg").show(800, "swing"); });
+      });    
+
+    });
+  </script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>IPL Auction-{{request.session.session_name}}</title>
+	<link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css" />
+</head>
+
+<body>
+	<div id="navigation">
+		<img src="{% static 'images/ipl_logo.png' %}" alt="IPL logo">
+		
+		<div id="auctions">
+			<h2><span>AUCTIONS</span></h2>
+		</div>
+		
+		<ul>
+		
+		<li><a href="#" id="signup">Signup</a></li>
+		<li><a href="#" id="login">Login</a></li>
+		<li><a href="#">Image Gallery</a></li>
+		<li><a href="#">About IPL</a></li>
+		
+		</ul>
+		
+	</div>
+	
+	
+	
+
+<div class="blockbg" id="bg" style="visibility: hidden;">
+    <div class="con" id="dg" style="visibility: hidden;">
+      <div class="closebn" title="Close" id="closebn"></div>
+<center><header>
+<h2>Register to start your own League Auction.</h2>
+</header>
+<form action="submit_data" method="POST" class="form_style">
+{%csrf_token%}
+<br/>
+<input id="id_email" maxlength="40" name="email" type="email" placeholder="Email Address"/><br/><br/>
+<input id="id_password" name="password" type="password" placeholder="Password"/><br/><br/>
+<input id="re-password" type="password" name="re-password" placeholder="Re-enter password"/><br/><br/>
+<input id="first_name" type="text" name="first_name" placeholder="First Name"/><br/><br/>
+<input id="last_name" type="text" name="last_name" placeholder="Last Name"/><br/><br/>
+<select name="gender" id="gender">
+<option value="M">Male</option>
+<option value="F">Female</option>
+<option value="N">Not specified</option>
+</select></p>
+<input id="age" type="text" name="age" placeholder="Age"/><br/><br/>
+<input class="submit-button" type="submit" value="Register">
+</form>
+</center>
+</div>
+</div>
+
+<div class="blockbkg" id="bkg" style="visibility: hidden;">
+    <div class="cont" id="dkg" style="visibility: hidden;">
+      <div class="closebn" title="Close" id="closebtn"></div>
+<center><header>
+<h2>Login to check updates, read news and much more.</h2>
+</header>
+<form action="login_submit" method="POST">
+{%csrf_token%}
+<br/><br/>
+{{login_form.as_p}}
+<input type="submit" value="Login">
+</form>
+</center>
+</div>
+</div>
+</body>
+</html>

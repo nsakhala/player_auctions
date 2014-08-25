@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>Indian Premiere League-Search results.</title>
+<h2>Here are the results based on your search query.</h2>
+</head>
+
+<body>
+{% if user %}
+<p>Users Exist</p>
+{%for u in user%}
+<li><p>{{u.name}}</p><p>{{u.age}}</p><p>{{u.gender}}</p></li>
+
+{%endfor%}
+
+{%else%}
+You did not type anything.
+{%endif%}
+</body>
+
+</html>

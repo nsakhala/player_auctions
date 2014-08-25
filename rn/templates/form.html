@@ -1,0 +1,14 @@
+<html>
+
+<head>
+<title>Django Form Series.</title>
+<h2>Welcome to Indian Premiere League.</h2></head>
+<body>
+<form action="submit_data" method="POST">
+{%csrf_token%}
+{{form.as_p}}
+<input type="submit" value="Register">
+</form>
+</body>
+
+</html>

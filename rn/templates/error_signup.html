@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load static %}
+{% load staticfiles %}
+<html>
+<head>
+
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>IPL Auction-User Exists.</title>
+	<link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css" />
+</head>
+
+<body>
+	<div id="navigation">
+		<img src="{{MEDIA_URL}}images/ipl_logo.png" alt="IPL logo">
+		
+		<div id="auctions">
+			<h2><span>AUCTIONS</span></h2>
+		</div>
+		<ul>
+		
+		<li><a href="#">Image Gallery</a></li>
+		<li><a href="#">About IPL</a></li>
+		<li><a href="home">Home</a></li>
+		
+		</ul>
+	</div>
+	
+	
+	<div id="text-box">
+	<p>
+	{{message}}
+	</div>
+	<div id="form-submit">
+	<center>
+	<form action="submit_data" method="POST" class="form_style">
+{%csrf_token%}
+<br/>
+<input id="id_email" maxlength="40" name="email" type="email" placeholder="Email Address"/><br/><br/>
+<input id="id_password" name="password" type="password" placeholder="Password"/><br/><br/>
+<input id="re-password" type="password" name="re-password" placeholder="Re-enter password"/><br/><br/>
+<input id="first_name" type="text" name="first_name" placeholder="First Name"/><br/><br/>
+<input id="last_name" type="text" name="last_name" placeholder="Last Name"/><br/><br/>
+<select name="gender" id="gender">
+<option value="M">Male</option>
+<option value="F">Female</option>
+<option value="N">Not specified</option>
+</select></p>
+<input id="age" type="text" name="age" placeholder="Age"/><br/><br/>
+<input class="submit-button" type="submit" value="Register">
+</form>
+</center>
+	</div>
+
+</body>
+</html>
